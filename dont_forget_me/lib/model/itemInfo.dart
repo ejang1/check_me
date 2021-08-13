@@ -3,7 +3,20 @@ import 'package:dont_forget_me/model/subItemInfo.dart';
 class ItemInfo{
   ItemInfo({required this.itemTitle, this.isDone = false, required this.subitemlist});
 
-  final String itemTitle;
+  String itemTitle;
   bool isDone;
   List<SubItemInfo> subitemlist;
+  bool existSub = false;
+  bool showSub = true;
+
+  bool subAllDone(){
+    bool result = true;
+    for(int i = 0; i<subitemlist.length;i++){
+      if(subitemlist[i].isDone == false){
+        result = false;
+        break;
+      }
+    }
+    return result;
+  }
 }

@@ -1,6 +1,6 @@
 class SubItemInfo{
   SubItemInfo({required this.itemTitle,this.isDone = false});
 
-  final String itemTitle;
+  String itemTitle;
   bool isDone;
 }

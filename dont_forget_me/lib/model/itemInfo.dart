@@ -1,7 +1,8 @@
 import 'package:dont_forget_me/model/subItemInfo.dart';
+import 'package:flutter/cupertino.dart';
 
 class ItemInfo{
-  ItemInfo({required this.itemTitle, this.isDone = false, required this.subitemlist});
+  ItemInfo({required this.itemTitle, this.isDone = false,required this.subitemlist});
 
   String itemTitle;
   bool isDone;
@@ -18,5 +19,9 @@ class ItemInfo{
       }
     }
     return result;
+  }
+
+  void setItemTitle(String input){
+    itemTitle = input;
   }
 }

@@ -11,7 +11,8 @@ const uparrow = FontAwesomeIcons.angleUp;
 //const uparrow = FontAwesomeIcons.caretUp;
 
 //color set
-const appBackgroudColor = Colors.black;
-const iconColor = Colors.black;
-const colorDone = Colors.greenAccent;
-const colorUndone = Colors.grey;
+const appBarColor = Color(0xFFE5DDCD);
+const appBackgroudColor = Color(0xFF101324);
+const iconColor = Color(0xFF101324);
+const colorDone = Color(0xD084D58D);
+const colorUndone = Color(0xFFE7EAE1);

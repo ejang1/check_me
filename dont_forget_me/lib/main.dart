@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:dont_forget_me/model/notificationService.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'constant.dart';
 import 'package:dont_forget_me/controller/percentage.dart';
@@ -8,33 +8,16 @@ import 'package:dont_forget_me/model/itemInfo.dart';
 import 'package:dont_forget_me/model/subItemInfo.dart';
 import 'package:dont_forget_me/model/timerSetting.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-void main() async {
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
-  var initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
-
-  var initializationSettingsIOS = IOSInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-    onDidReceiveLocalNotification:(int id, String? title, String? body, String? payload,) async{});
-
-  var initializationSettings = InitializationSettings(android: initializationSettingsAndroid,iOS: initializationSettingsIOS);
-  print('here');
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-  onSelectNotification: (String? payload) async{
-    if(payload != null){
-      debugPrint('notification payload: ' + payload);
-    }
-  });
-
+  await NotificationService().init();
   runApp(MyApp());
 }
-String itemInput = "";
 
+String itemInput = "";
 late TimerSetting timer;
+List<ItemInfo> items = [];
+double percent = 0;
 
 class MyApp extends StatefulWidget {
   @override
@@ -56,14 +39,14 @@ class myScaffold extends StatefulWidget {
 }
 
 class _myScaffoldState extends State<myScaffold> {
-  List<ItemInfo> items = [];
+
   Percentage percentage = new Percentage();
-  double percent = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    timer = new TimerSetting();
+
     //dateAlarm = DateTime(DateTime.now().year,timer.month,timer.date,timer.hour,timer.min);
   }
 
@@ -102,7 +85,9 @@ class _myScaffoldState extends State<myScaffold> {
                       width: 60,
                       image: AssetImage('images/checkme.png'),
                     ),
-                    onPressed: () => showDialog<String>(
+                    onPressed: (){
+                      timer = new TimerSetting();
+                      showDialog<String>(
                       context: context,
                       builder: (BuildContext context) => StatefulBuilder(
                         builder: (context,setState) => AlertDialog(
@@ -273,10 +258,11 @@ class _myScaffoldState extends State<myScaffold> {
                                       child: Text('CANCLE'),
                                     ),
                                     TextButton(
-                                      onPressed: (){
-                                        Navigator.pop(context,'OK');
+                                      onPressed: () {
+                                        NotificationService().scheduledAlarm();
+                                        Navigator.pop(context,'SAVE');
                                       },
-                                      child: Text('OK'),
+                                      child: Text('SAVE'),
                                     ),
                                   ],
                                 ),
@@ -285,7 +271,8 @@ class _myScaffoldState extends State<myScaffold> {
                           ),
                         ),
                       ),
-                    ),
+                    );
+                    },
                     constraints: BoxConstraints.tightFor(),
                   ),
                   RawMaterialButton(
